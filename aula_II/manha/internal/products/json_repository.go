@@ -1,6 +1,7 @@
 package products
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/anwardh/meliProject/pkg/store"
@@ -19,6 +20,10 @@ func NewJsonRepository(db store.Store) Repository {
 		// Aqui estamos passando o "trabalhador" para a repository, que é do tipo Store
 		db: db,
 	}
+}
+
+func (r *jsonRepository) GetOneWithContext(ctx context.Context, id int) (Product, error) {
+	return Product{}, nil
 }
 
 func (r *jsonRepository) GetOne(id int) (Product, error) {

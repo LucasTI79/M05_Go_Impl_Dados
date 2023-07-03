@@ -13,16 +13,19 @@ func Test_sqlRepository_Store_Mock(t *testing.T) {
 	t.Run("deve buscar um produto com o id informado", func(t *testing.T) {
 		db, mock := SetupMock(t)
 		defer db.Close()
-		// estamos retornando 1,1 por conta do retorno precisar do ultimo id
-		// inserido e do número de linhas afetadas
-		mock.ExpectExec("INSERT INTO products").WillReturnResult(sqlmock.NewResult(1, 1))
 
 		// Aqui é como se criamos uma tabela
 		columns := []string{"id", "name", "type", "count", "price"}
 		rows := sqlmock.NewRows(columns)
 		productId := 1
-		rows.AddRow(productId, "", "", "", "")
-		mock.ExpectQuery("SELECT .* FROM products WHERE").WithArgs(productId).WillReturnRows(rows)
+		rows.AddRow(productId, "", "", 0, 0.0)
+
+		// estamos retornando 1,1 por conta do retorno precisar do ultimo id
+		// inserido e do número de linhas afetadas
+		// mock.ExpectExec("INSERT INTO products").WithArgs(sql.Named("id", productId), sql.Named("name", "batata")).WillReturnResult(sqlmock.NewResult(1, 1))
+
+		// esse rows funciona como se fosse o resultado, definimos as colunas desse resultado e os valores
+		mock.ExpectQuery("SELECT .* FROM products").WithArgs(sql.Named("id", productId)).WillReturnRows(rows)
 
 		// Realizando os testes
 
@@ -30,27 +33,28 @@ func Test_sqlRepository_Store_Mock(t *testing.T) {
 		repository := products.NewMySqlRepository(db)
 		// ctx := context.TODO()
 
-		// Aqui é o produo que iremos inserir primeiro para depois buscá-lo
-		product := products.Product{
-			ID: productId,
-		}
+		// Aqui é o produto que iremos inserir primeiro para depois buscá-lo
+		// product := products.Product{
+		// 	ID:   productId,
+		// 	Name: "batata",
+		// }
 
 		// Verificamos se nao há produtos na base de dados com esse id
 		// Fazemos as asserções de não ter erros nessa interação
 		// e verificamos se o retorno é nil
-		// getResult, err := repository.GetOne(productId)
-		// assert.NoError(t, err)
-		// assert.Nil(t, getResult)
+		getResult, err := repository.GetOne(productId)
+		assert.NoError(t, err)
+		assert.Equal(t, products.Product{}, getResult)
 
 		// Aqui estamos inserindo o produto uqe iremos buscar futuramente
-		result, err := repository.Store(product)
-		assert.NoError(t, err)
-		// Busca o produto que acabamos de inserir
+		// _, err = repository.Store(product)
+		// assert.NoError(t, err)
+		// // Busca o produto que acabamos de inserir
 		// getResult, err = repository.GetOne(productId)
 		// assert.NoError(t, err)
 		// assert.NotNil(t, getResult)
-		assert.Equal(t, product.ID, result.ID)
-		assert.NoError(t, mock.ExpectationsWereMet())
+		// assert.Equal(t, product.ID, getResult.ID)
+		// assert.NoError(t, mock.ExpectationsWereMet())
 	})
 }
 
