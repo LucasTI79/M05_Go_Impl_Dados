@@ -26,5 +26,19 @@
     "category": "Funcional",
     "count": 10,
     "price": 99.99
+  },
+  {
+    "id": 5,
+    "name": "Tester",
+    "category": "Funcional",
+    "count": 10,
+    "price": 99.99
+  },
+  {
+    "id": 6,
+    "name": "Tester",
+    "category": "Funcional",
+    "count": 10,
+    "price": 99.99
   }
 ]

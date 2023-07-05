@@ -21,8 +21,8 @@ const (
 		"FROM products INNER JOIN warehouses ON products.id_warehouse = warehouses.id " +
 		"WHERE products.id = ?"
 	GetAllProducts    = "SELECT id, name, type, count, price, FROM products"
-	ProductStore      = "INSERT INTO products(name, type, count, price) VALUES( ?, ?, ?, ? )"
-	GetOneProduct     = "SELECT p.id, p.name, p.type, p.count, p.price FROM products WHERE id = ?"
+	ProductStore      = "INSERT INTO products(name, type, count, price) VALUES(?,?,?,?)"
+	GetOneProduct     = "SELECT p.id, p.name, p.type, p.count, p.price FROM products p WHERE id = ?"
 	UpdateProduct     = "UPDATE products SET name = ?, type = ?, count = ?, price = ? WHERE id = ?"
 	UpdateProductName = "UPDATE products SET name = ? WHERE id = ?"
 	DeleteProduct     = "DELETE FROM products WHERE id = ?"
@@ -96,6 +96,7 @@ func (r *mysqlRepository) GetOne(id int) (Product, error) {
 			return product, err
 		}
 	}
+
 	return product, err
 }
 
