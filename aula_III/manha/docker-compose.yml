@@ -3,6 +3,10 @@ version: '3.8'
 volumes:
  portainer: {}
 services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
   mongodb:
     image: mongo:latest
     container_name: mongo_meli
